@@ -10,6 +10,34 @@
     <button id="getDigimonBtn">Obtener Digimon</button>
     <p id="loading" style="display: none;">Cargando ...</p>
     <ul id="digimonList"></ul>
+    <script>
+        document.getElementById('getDigimonBtn').addEventListener('click',() => {
+            document.getElementById('loading').style.display = 'block';
+
+            fetch('https://digimon-api.vercel.app/api/digimon')
+                .then(response => response.json())
+                .then(data => { 
+                    console.log(JSON.stringify(data, null, 2));
+
+                    const digimonList = document.getElementById('digimonList');
+                    digimonList.innerHTML = "";
+
+                    data.forEach(digimon => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <p><strong>${digimon.name}</strong> - Nivel: ${digimon.level}</p>
+                            <img src="${digimon.img}" alt="${digimon.name}" width"100">
+                        `;
+                        digimonList.appendChild(li);
+                    });
+                    document.getElementById('loading').style.display = 'none';
+                })
+                .catch(error => {
+                    console.error("Error: ", error);
+                    document.getElementById('loading').style.display = 'none';
+                });
+        });
+    </script>
     
 </body>
 </html>
